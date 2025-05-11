@@ -1,0 +1,210 @@
+#include <stdio.h>
+#include <windows.h>
+
+#define numberOfCurrencies 100
+
+// Function prototypes
+void printMenuHeader();
+void menu();
+
+// Currency names with abbreviations in one array
+char currencies[numberOfCurrencies][40] =
+{
+    "US Dollar (USD)", "Euro (EUR)", "Japanese Yen (JPY)", "British Pound (GBP)", "Australian Dollar (AUD)", "Canadian Dollar (CAD)", "Swiss Franc (CHF)", "Chinese Yuan (CNY)",
+    "Indian Rupee (INR)", "Mexican Peso (MXN)", "Brazilian Real (BRL)", "Russian Ruble (RUB)", "South African Rand (ZAR)", "New Zealand Dollar (NZD)", "Singapore Dollar (SGD)",
+    "Hong Kong Dollar (HKD)", "Swedish Krona (SEK)", "Norwegian Krone (NOK)", "Danish Krone (DKK)", "Turkish Lira (TRY)", "Philippine Peso (PHP)", "Malaysian Ringgit (MYR)",
+    "Thai Baht (THB)", "Indonesian Rupiah (IDR)", "Cambodian Riel (KHR)", "Laotian Kip (LAK)", "South Korean Won (KRW)", "Israeli Shekel (ILS)",
+    "UAE Dirham (AED)", "Zimbabwean Dollar (ZWL)", "Saudi Riyal (SAR)", "Qatari Riyal (QAR)", "Kuwaiti Dinar (KWD)", "Bahraini Dinar (BHD)", "Omani Rial (OMR)",
+    "Pakistani Rupee (PKR)", "Vietnamese Dong (VND)", "Egyptian Pound (EGP)", "Argentine Peso (ARS)", "Chilean Peso (CLP)", "Colombian Peso (COP)", "Peruvian Sol (PEN)",
+    "Bangladeshi Taka (BDT)", "Sri Lankan Rupee (LKR)", "Nepalese Rupee (NPR)", "Kazakhstani Tenge (KZT)", "Uzbekistani Som (UZS)", "Nigerian Naira (NGN)", "Ghanaian Cedi (GHS)",
+    "Kenyan Shilling (KES)", "Moroccan Dirham (MAD)", "Tunisian Dinar (TND)", "Algerian Dinar (DZD)", "Jordanian Dinar (JOD)", "Lebanese Pound (LBP)", "Iraqi Dinar (IQD)",
+    "Iranian Rial (IRR)", "Syrian Pound (SYP)", "Afghan Afghani (AFN)", "Mongolian Tugrik (MNT)", "Georgian Lari (GEL)", "Armenian Dram (AMD)", "Azerbaijani Manat (AZN)",
+    "Belarusian Ruble (BYN)", "Bosnian Convertible Mark (BAM)", "Bulgarian Lev (BGN)", "Croatian Kuna (HRK)", "Romanian Leu (RON)", "Serbian Dinar (RSD)",
+    "Ukrainian Hryvnia (UAH)", "Moldovan Leu (MDL)", "Turkmenistan Manat (TMT)", "Tajikistani Somoni (TJS)", "North Macedonian Denar (MKD)", "Albanian Lek (ALL)",
+    "Icelandic Krona (ISK)", "Cuban Peso (CUP)", "Dominican Peso (DOP)", "Honduran Lempira (HNL)", "Nicaraguan Córdoba (NIO)", "Costa Rican Colón (CRC)",
+    "Guatemalan Quetzal (GTQ)", "Paraguayan Guarani (PYG)", "Uruguayan Peso (UYU)", "Bolivian Boliviano (BOB)", "Panamanian Balboa (PAB)", "Trinidad & Tobago Dollar (TTD)",
+    "Jamaican Dollar (JMD)", "Barbadian Dollar (BBD)", "East Caribbean Dollar (XCD)", "Bahamian Dollar (BSD)", "Fijian Dollar (FJD)", "Samoan Tala (WST)", "Malagasy Ariary (MGA)",
+    "Mauritian Rupee (MUR)", "Mozambican Metical (MZN)", "Botswana Pula (BWP)", "Angolan Kwanza (AOA)", "Seychellois Rupee (SCR)", "Cape Verdean Escudo (CVE)"
+};
+
+// Corresponding conversion rates to USD
+float toUSD[numberOfCurrencies] = {1, 1.13, 0.0069, 1.33, 0.64, 0.72, 1.20, 0.14, 0.012, 0.051, 0.18, 0.012,
+                                   0.055, 0.59, 0.77, 0.13, 0.10, 0.096, 0.15, 0.026, 0.018, 0.23, 0.030,
+                                   0.000061, 0.000246, 0.0000497, 0.00071, 0.28, 0.27, 0.000970, 0.27, 0.27, 3.26,
+                                   2.65, 2.60, 0.0036, 0.000038, 0.020, 0.00089, 0.0011, 0.00024, 0.28,
+                                   0.0082, 0.0033, 0.0073, 0.0019, 0.000078, 0.00062, 0.076, 0.0077,
+                                   0.11, 0.33, 0.0075, 1.41, 0.000011, 0.00076, 0.000024, 0.00008,
+                                   0.014, 0.00028, 0.36, 0.0026, 0.59, 0.31, 0.58, 0.57, 0.14244,
+                                   4.56, 0.0096, 0.024, 0.05834, 0.2859, 10.32, 54.83, 0.012, 0.0077,
+                                   0.041677063, 0.017, 0.039, 36.76, 0.0020, 0.13, 0.00013, 0.024, 0.14,
+                                   1.00, 6.79, 0.0063, 0.50, 0.37, 0.9999, 0.44, 0.35940, 0.00022, 0.022,
+                                   0.016, 0.074, 0.0011, 0.070, 0.01};
+// Main function
+int main()
+{
+    int from, to;
+    float amount, result, amountInUSD;
+    char choice;
+
+    do
+        {
+        printMenuHeader(); //function call
+        menu(); //function call
+
+        // Get user input
+        printf("\n\t\t\tEnter the currency number to convert FROM (1-100): ");
+        scanf("%d", &from);
+        Beep(500, 300); 
+
+        while (from < 1 || from > numberOfCurrencies)
+        {
+            printf("\n\t\t\tInvalid input. Please enter a valid number (1-100): ");
+            scanf("%d", &from);
+            Beep(500, 300);
+        }
+
+        printf("\n\t\t\tEnter the currency number to convert TO (1-100): ");
+        scanf("%d", &to);
+        Beep(500, 300);
+
+        while (to < 1 || to > numberOfCurrencies)
+        {
+            printf("\n\t\t\tInvalid input. Please enter a valid number (1-100): ");
+            scanf("%d", &to);
+            Beep(500, 300);
+        }
+
+        printf("\n\t\t\tEnter amount: ");
+        scanf("%f", &amount);
+        Beep(500, 300);
+
+        while (amount <= 0)
+        {
+            printf("\n\t\t\tInvalid input. Please enter a valid amount: ");
+            scanf("%f", &amount);
+            Beep(500, 300);
+        }
+
+        // Perform conversion
+        amountInUSD = amount * toUSD[from - 1];
+        result = amountInUSD / toUSD[to - 1];
+
+        // Display result
+        Beep(1000, 200);
+        printf("\n       =========================================================================================\n");
+        printf("       RESULT: %.6f %s = %.6f %s\n", amount, currencies[from - 1], result, currencies[to - 1]);
+        printf("       =========================================================================================\n");
+        Beep(1000, 300);
+
+        // Ask user if they want to try again
+        printf("\n\t\t\tDo you want to convert again? (Y/N): ");
+        scanf(" %c", &choice);
+
+        while (choice != 'Y' && choice != 'y' && choice != 'N' && choice != 'n')
+        {
+        printf("\n\t\t\tInvalid input. Please enter 'Y' or 'N': ");
+        scanf(" %c", &choice);
+        }
+
+    } while (choice == 'Y' || choice == 'y');
+
+        // Exit the program
+    Beep(250, 300);
+        printf("\n\n\n\t\t  \"Money knows no borders, and neither should your opportunities.\"");
+    Beep(500, 300);
+        printf("\n\n\t\t                    Thank you for using the");
+    Beep(750, 1000);
+        printf("\n\n\t\t                        GLOBAL CURRENCY");
+        printf("\n\t\t                      EXCHANGE CONVERTER");
+    Beep(1000, 1500);
+    Beep(750, 300);
+        printf("\n\n\t\t                           Goodbye! \n\n\n\n\n\n\n");
+    Beep(500, 200);
+}
+
+// Function to print the header of the menu
+void printMenuHeader()
+{
+    printf("\n");
+    Beep(400, 200); // Frequency (Hz), Duration (ms)
+    printf(" =====================================================================================================\n");
+    printf(" ===== * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * =====\n");
+    printf(" =====================================================================================================\n");
+    printf("       * * *                                                                               * * *\n");
+    printf("       =====                       G L O B A L   C U R R E N C Y                           =====\n");
+    printf("       * * *                    E X C H A N G E   C O N V E R T E R                        * * *\n");
+    printf("       =====                                                                               =====\n");
+    printf("       * * *                       Convert between 100 different                           * * *\n");
+    printf("       =====                          world currencies easily                              =====\n");
+    printf("       * * *                                                                               * * *\n");
+    printf(" =====================================================================================================\n");
+    printf(" ===== * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * =====\n");
+    printf(" =====================================================================================================\n");
+}
+
+// Function to print the list of currencies
+void menu() {
+    Sleep(200);
+    Beep(500, 200);
+    printf("       =====                                                                               =====\n");
+    printf("       * * *   [1] US Dollar (USD)                  [51] Moroccan Dirham (MAD)             * * *\n");
+    printf("       =====   [2] Euro (EUR)                       [52] Tunisian Dinar (TND)              =====\n");
+    printf("       * * *   [3] Japanese Yen (JPY)               [53] Algerian Dinar (DZD)              * * *\n");
+    printf("       =====   [4] British Pound (GBP)              [54] Jordanian Dinar (JOD)             =====\n");
+    printf("       * * *   [5] Australian Dollar (AUD)          [55] Lebanese Pound (LBP)              * * *\n");
+    printf("       =====   [6] Canadian Dollar (CAD)            [56] Iraqi Dinar (IQD)                 =====\n");
+    printf("       * * *   [7] Swiss Franc (CHF)                [57] Iranian Rial (IRR)                * * *\n");
+    printf("       =====   [8] Chinese Yuan (CNY)               [58] Syrian Pound (SYP)                =====\n");
+    printf("       * * *   [9] Indian Rupee (INR)               [59] Afghan Afghani (AFN)              * * *\n");
+    printf("       =====   [10] Mexican Peso (MXN)              [60] Mongolian Tugrik (MNT)            =====\n");
+    printf("       * * *   [11] Brazilian Real (BRL)            [61] Georgian Lari (GEL)               * * *\n");
+    printf("       =====   [12] Russian Ruble (RUB)             [62] Armenian Dram (AMD)               =====\n");
+    printf("       * * *   [13] South African Rand (ZAR)        [63] Azerbaijani Manat (AZN)           * * *\n");
+    printf("       =====   [14] New Zealand Dollar (NZD)        [64] Belarusian Ruble (BYN)            =====\n");
+    printf("       * * *   [15] Singapore Dollar (SGD)          [65] Bosnian Convertible Mark (BAM)    * * *\n");
+    printf("       =====   [16] Hong Kong Dollar (HKD)          [66] Bulgarian Lev (BGN)               =====\n");
+    printf("       * * *   [17] Swedish Krona (SEK)             [67] Croatian Kuna (HRK)               * * *\n");
+    printf("       =====   [18] Norwegian Krone (NOK)           [68] Romanian Leu (RON)                =====\n");
+    printf("       * * *   [19] Danish Krone (DKK)              [69] Serbian Dinar (RSD)               * * *\n");
+    printf("       =====   [20] Turkish Lira (TRY)              [70] Ukrainian Hryvnia (UAH)           =====\n");
+    Sleep(200);
+    Beep(600, 200);
+    printf("       * * *   [21] Philippine Peso (PHP)           [71] Moldovan Leu (MDL)                * * *\n");
+    printf("       =====   [22] Malaysian Ringgit (MYR)         [72] Turkmenistan Manat (TMT)          =====\n");
+    printf("       * * *   [23] Thai Baht (THB)                 [73] Tajikistani Somoni (TJS)          * * *\n");
+    printf("       =====   [24] Indonesian Rupiah (IDR)         [74] North Macedonian Denar (MKD)      =====\n");
+    printf("       * * *   [25] Cambodian Riel (KHR)            [75] Albanian Lek (ALL)                * * *\n");
+    printf("       =====   [26] Laotian Kip (LAK)               [76] Icelandic Krona (ISK)             =====\n");
+    printf("       * * *   [27] South Korean Won (KRW)          [77] Cuban Peso (CUP)                  * * *\n");
+    printf("       =====   [28] Israeli Shekel (ILS)            [78] Dominican Peso (DOP)              =====\n");
+    printf("       * * *   [29] UAE Dirham (AED)                [79] Honduran Lempira (HNL)            * * *\n");
+    printf("       =====   [30] Zimbabwean Dollar (ZWL)         [80] Nicaraguan Cordoba (NIO)          =====\n");
+    printf("       * * *   [31] Saudi Riyal (SAR)               [81] Costa Rican Colon (CRC)           * * *\n");
+    printf("       =====   [32] Qatari Riyal (QAR)              [82] Guatemalan Quetzal (GTQ)          =====\n");
+    printf("       * * *   [33] Kuwaiti Dinar (KWD)             [83] Paraguayan Guarani (PYG)          * * *\n");
+    printf("       =====   [34] Bahraini Dinar (BHD)            [84] Uruguayan Peso (UYU)              =====\n");
+    printf("       * * *   [35] Omani Rial (OMR)                [85] Bolivian Boliviano (BOB)          * * *\n");
+    printf("       =====   [36] Pakistani Rupee (PKR)           [86] Panamanian Balboa (PAB)           =====\n");
+    printf("       * * *   [37] Vietnamese Dong (VND)           [87] Trinidad & Tobago Dollar (TTD)    * * *\n");
+    printf("       =====   [38] Egyptian Pound (EGP)            [88] Jamaican Dollar (JMD)             =====\n");
+    printf("       * * *   [39] Argentine Peso (ARS)            [89] Barbadian Dollar (BBD)            * * *\n");
+    printf("       =====   [40] Chilean Peso (CLP)              [90] East Caribbean Dollar (XCD)       =====\n");
+    Sleep(200);
+    Beep(500, 200);
+    printf("       * * *   [41] Colombian Peso (COP)            [91] Bahamian Dollar (BSD)             * * *\n");
+    printf("       =====   [42] Peruvian Sol (PEN)              [92] Fijian Dollar (FJD)               =====\n");
+    printf("       * * *   [43] Bangladeshi Taka (BDT)          [93] Samoan Tala (WST)                 * * *\n");
+    printf("       =====   [44] Sri Lankan Rupee (LKR)          [94] Malagasy Ariary (MGA)             =====\n");
+    printf("       * * *   [45] Nepalese Rupee (NPR)            [95] Mauritian Rupee (MUR)             * * *\n");
+    printf("       =====   [46] Kazakhstani Tenge (KZT)         [96] Mozambican Metical (MZN)          =====\n");
+    printf("       * * *   [47] Uzbekistani Som (UZS)           [97] Botswana Pula (BWP)               * * *\n");
+    printf("       =====   [48] Nigerian Naira (NGN)            [98] Angolan Kwanza (AOA)              =====\n");
+    printf("       * * *   [49] Ghanaian Cedi (GHS)             [99] Seychellois Rupee (SCR)           * * *\n");
+    printf("       =====   [50] Kenyan Shilling (KES)           [100] Cape Verdean Escudo (CVE)        =====\n");
+    printf("       * * *                                                                               * * *\n");
+    printf("       =========================================================================================\n");
+    printf("       * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n");
+    printf("       =========================================================================================\n");
+    Sleep(200);
+    Beep(400, 200);
+}
